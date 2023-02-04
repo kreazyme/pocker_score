@@ -49,6 +49,9 @@ class _AddRoundDialogState extends State<AddRoundDialog> {
       players: players,
       createTime: DateTime.now(),
       games: [],
+      pointLimit: -1,
+      gameLimit: -1,
+      isHidePoint: false,
     );
     RoundService().newRound(round);
     Navigator.of(context).pop();

@@ -31,4 +31,24 @@ class RoundService {
     ls.removeAt(index);
     await Hive.box("game").put("rounds", ls);
   }
+
+  Future<void> onChangeHidePoint(int index, bool value) async {
+    final ls = await Hive.box("game").get("rounds") as List;
+    ls[index].isHidePoint = value;
+    await Hive.box("game").put("rounds", ls);
+  }
+
+  Future<void> onChangePointLimit(int index, int limit) async {
+    final ls = await Hive.box("game").get("rounds") as List;
+    ls[index].pointLimit = limit;
+    ls[index].gameLimit = 0;
+    await Hive.box("game").put("rounds", ls);
+  }
+
+  Future<void> onChangeGameLimit(int index, int limit) async {
+    final ls = await Hive.box("game").get("rounds") as List;
+    ls[index].pointLimit = 0;
+    ls[index].gameLimit = limit;
+    await Hive.box("game").put("rounds", ls);
+  }
 }

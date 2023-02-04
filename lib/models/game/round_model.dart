@@ -11,11 +11,17 @@ class RoundModel {
     required this.games,
     required this.players,
     required this.createTime,
+    required this.pointLimit,
+    required this.gameLimit,
+    required this.isHidePoint,
   });
 
   RoundModel.initial()
       : games = [],
         players = [],
+        pointLimit = -1,
+        gameLimit = -1,
+        isHidePoint = false,
         createTime = DateTime.now();
 
   @HiveField(0)
@@ -27,13 +33,12 @@ class RoundModel {
   @HiveField(2)
   final DateTime createTime;
 
-  
+  @HiveField(3)
+  int pointLimit;
 
-  factory RoundModel.fromJson(Map<String, dynamic> json) => RoundModel(
-        games: List<GameModel>.from(
-            json["games"].map((x) => GameModel.fromJson(x))),
-        players: List<PlayerModel>.from(
-            json["players"].map((x) => PlayerModel.fromJson(x))),
-        createTime: DateTime.parse(json["createTime"]),
-      );
+  @HiveField(4)
+  int gameLimit;
+
+  @HiveField(5)
+  bool isHidePoint;
 }

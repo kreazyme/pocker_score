@@ -10,6 +10,17 @@ class GameModel {
     required this.isDeleted,
   });
 
+  operator +(GameModel other) {
+    return GameModel(
+      scores: List.generate(
+        scores.length,
+        (index) => scores[index] + other.scores[index],
+      ),
+      note: note,
+      isDeleted: isDeleted,
+    );
+  }
+
   @HiveField(0)
   List<int> scores;
 
