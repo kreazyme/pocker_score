@@ -20,6 +20,7 @@ class AddRoundDialog extends StatefulWidget {
 
 class _AddRoundDialogState extends State<AddRoundDialog> {
   List<PlayerModel> players = [];
+  String gameName = "Game";
 
   void _initPlayer() {
     setState(() {
@@ -52,6 +53,7 @@ class _AddRoundDialogState extends State<AddRoundDialog> {
       pointLimit: -1,
       gameLimit: -1,
       isHidePoint: false,
+      gameName: gameName,
     );
     RoundService().newRound(round);
     Navigator.of(context).pop();
@@ -87,7 +89,14 @@ class _AddRoundDialogState extends State<AddRoundDialog> {
           child: const Text("OK"),
         ),
       ],
-      title: const Text("Thêm người chơi"),
+      title: TextField(
+        decoration: const InputDecoration(
+          hintText: "Round name",
+        ),
+        onChanged: (value) => setState(() {
+          gameName = value;
+        }),
+      ),
       content: SizedBox(
         width: width * 0.8,
         child: SingleChildScrollView(

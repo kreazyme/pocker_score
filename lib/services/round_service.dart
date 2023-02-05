@@ -51,4 +51,10 @@ class RoundService {
     ls[index].gameLimit = limit;
     await Hive.box("game").put("rounds", ls);
   }
+
+  Future<void> updateRoundName(int index, String name) async {
+    final ls = await Hive.box("game").get("rounds") as List;
+    ls[index].gameName = name;
+    await Hive.box("game").put("rounds", ls);
+  }
 }

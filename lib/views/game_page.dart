@@ -4,6 +4,7 @@ import 'package:pocker_score/models/game/round_model.dart';
 import 'package:pocker_score/services/game_service.dart';
 import 'package:pocker_score/services/round_service.dart';
 import 'package:pocker_score/views/widget/add_game_dialog.dart';
+import 'package:pocker_score/views/widget/edit_game_name_dialog.dart';
 import 'package:pocker_score/views/widget/setting_dialog.dart';
 import 'package:pocker_score/views/widget/success_dialog.dart';
 
@@ -118,7 +119,18 @@ class _GamePageState extends State<GamePage> {
         child: const Icon(Icons.add),
       ),
       appBar: AppBar(
-        title: const Text("Game page"),
+        title: Row(children: [
+          Text(round.gameName),
+          const SizedBox(width: 10),
+          GestureDetector(
+            onTap: () {
+              editGameName();
+            },
+            child: const Icon(
+              Icons.edit,
+            ),
+          )
+        ]),
         actions: [
           IconButton(
             onPressed: () {
@@ -155,6 +167,9 @@ class _GamePageState extends State<GamePage> {
                         );
                       }
                       return ListTile(
+                        onTap: () {
+                          showEditGameDialog(index - 1);
+                        },
                         title: Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
@@ -197,6 +212,19 @@ class _GamePageState extends State<GamePage> {
     );
   }
 
+  void showEditGameDialog(int index) {
+    showDialog(
+      context: context,
+      builder: (context) => AddGameDialog(
+        gameIndex: widget.gameIndex,
+        players: round.players,
+        onDone: getGame,
+        game: round.games[index],
+        index: index,
+      ),
+    );
+  }
+
   void showSettingDialog() {
     showDialog(
       context: context,
@@ -205,6 +233,16 @@ class _GamePageState extends State<GamePage> {
         onDone: checkResult,
         gameLimit: round.gameLimit,
         pointLimit: round.pointLimit,
+      ),
+    );
+  }
+
+  void editGameName() {
+    showDialog(
+      context: context,
+      builder: (context) => EditGameNameDialog(
+        gameIndex: widget.gameIndex,
+        oldName: round.gameName,
       ),
     );
   }

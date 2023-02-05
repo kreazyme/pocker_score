@@ -4,16 +4,20 @@ import 'package:pocker_score/models/game/game_model.dart';
 import 'package:pocker_score/services/game_service.dart';
 
 class AddGameDialog extends StatefulWidget {
-  AddGameDialog({
+  const AddGameDialog({
     super.key,
     required this.players,
     required this.gameIndex,
     required this.onDone,
+    this.game,
+    this.index,
   });
 
   final List<PlayerModel> players;
   final int gameIndex;
-  Function onDone;
+  final Function onDone;
+  final GameModel? game;
+  final int? index;
 
   @override
   State<AddGameDialog> createState() => _AddGameDialogState();
@@ -23,13 +27,21 @@ class _AddGameDialogState extends State<AddGameDialog> {
   GameModel game = GameModel.initial();
 
   Future<void> addGame() async {
-    await GameService().newGame(game, widget.gameIndex);
+    if (widget.game != null) {
+      await GameService().updateGame(game, widget.gameIndex, widget.index!);
+    } else {
+      await GameService().newGame(game, widget.gameIndex);
+    }
   }
 
   @override
   void initState() {
     super.initState();
-    game.scores = List<int>.filled(widget.players.length, 0);
+    if (widget.game != null) {
+      game = widget.game!;
+    } else {
+      game.scores = List<int>.filled(widget.players.length, 0);
+    }
   }
 
   @override
@@ -47,7 +59,9 @@ class _AddGameDialogState extends State<AddGameDialog> {
           onPressed: () async {
             await addGame();
             widget.onDone();
-            Navigator.pop(context);
+            if (mounted) {
+              Navigator.pop(context);
+            }
           },
           child: const Text("Add"),
         ),
@@ -136,6 +150,7 @@ class _AddGameDialogState extends State<AddGameDialog> {
                 ),
               ),
               Container(
+                margin: const EdgeInsets.only(top: 10),
                 child:
                     game.scores.reduce((value, element) => element + value) == 0
                         ? Container()

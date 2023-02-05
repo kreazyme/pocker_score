@@ -14,6 +14,7 @@ class RoundModel {
     required this.pointLimit,
     required this.gameLimit,
     required this.isHidePoint,
+    required this.gameName,
   });
 
   RoundModel.initial()
@@ -22,7 +23,8 @@ class RoundModel {
         pointLimit = -1,
         gameLimit = -1,
         isHidePoint = false,
-        createTime = DateTime.now();
+        createTime = DateTime.now(),
+        gameName = "Game";
 
   @HiveField(0)
   List<GameModel> games;
@@ -41,4 +43,7 @@ class RoundModel {
 
   @HiveField(5)
   bool isHidePoint;
+
+  @HiveField(6)
+  String gameName;
 }

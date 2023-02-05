@@ -32,8 +32,11 @@ class _SettingDialogState extends State<SettingDialog> {
     setState(() {
       isPoint = widget.pointLimit > 0;
       isGame = widget.gameLimit > 0;
-      _controller.text =
-          isPoint ? widget.pointLimit.toString() : widget.gameLimit.toString();
+      _controller.text = isPoint
+          ? widget.pointLimit.toString()
+          : isGame
+              ? widget.gameLimit.toString()
+              : "0";
     });
   }
 

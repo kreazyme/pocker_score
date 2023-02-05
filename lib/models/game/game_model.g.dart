@@ -20,19 +20,22 @@ class GameModelAdapter extends TypeAdapter<GameModel> {
       scores: (fields[0] as List).cast<int>(),
       note: fields[1] as String,
       isDeleted: fields[2] as bool,
+      createTime: fields[3] as DateTime,
     );
   }
 
   @override
   void write(BinaryWriter writer, GameModel obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.scores)
       ..writeByte(1)
       ..write(obj.note)
       ..writeByte(2)
-      ..write(obj.isDeleted);
+      ..write(obj.isDeleted)
+      ..writeByte(3)
+      ..write(obj.createTime);
   }
 
   @override

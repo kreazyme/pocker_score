@@ -14,4 +14,11 @@ class GameService {
     round.games.add(game);
     await Hive.box("game").put("rounds", db);
   }
+
+  Future<void> updateGame(GameModel game, int roundIndex, int gameIndex) async {
+    final db = await Hive.box("game").get("rounds") as List;
+    final round = db[roundIndex] as RoundModel;
+    round.games[gameIndex] = game;
+    await Hive.box("game").put("rounds", db);
+  }
 }
