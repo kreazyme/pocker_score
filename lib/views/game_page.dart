@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:pocker_score/models/game/game_model.dart';
 import 'package:pocker_score/models/game/round_model.dart';
 import 'package:pocker_score/services/game_service.dart';
+import 'package:pocker_score/services/round_service.dart';
 import 'package:pocker_score/views/widget/add_game_dialog.dart';
+import 'package:pocker_score/views/widget/edit_game_name_dialog.dart';
+import 'package:pocker_score/views/widget/setting_dialog.dart';
+import 'package:pocker_score/views/widget/success_dialog.dart';
 
 class GamePage extends StatefulWidget {
   const GamePage({super.key, required this.gameIndex});
@@ -21,7 +25,28 @@ class _GamePageState extends State<GamePage> {
     final result = await GameService().getDetailRound(widget.gameIndex);
     setState(() {
       round = result;
+      isHidePoint = result.isHidePoint;
     });
+    checkResult();
+  }
+
+  Future<void> onChangeHidePoint(bool value) async {
+    await RoundService().onChangeHidePoint(widget.gameIndex, value);
+    setState(() {
+      isHidePoint = value;
+    });
+  }
+
+  void checkResult() {
+    if ((round.gameLimit > 0 && round.games.length >= round.gameLimit) ||
+        (round.pointLimit > 0 &&
+            round.games
+                .reduce((value, element) => value + element)
+                .scores
+                .any((element) => element >= round.pointLimit))) {
+      showDoneDialog();
+      Navigator.push(context, GameSuccessDialog());
+    }
   }
 
   @override
@@ -30,22 +55,20 @@ class _GamePageState extends State<GamePage> {
     getGame();
   }
 
-  List<Widget> _buildGameList(GameModel game, bool isGrey) {
-    final List<Widget> list = [];
-    for (var element in game.scores) {
-      list.add(
-        Expanded(
-          flex: 1,
-          child: Text(
-            element.toString(),
-            style: const TextStyle(fontSize: 18),
-            textAlign: TextAlign.center,
-          ),
-        ),
-      );
-    }
-    return list;
-  }
+  List<Widget> _buildGameList(
+    GameModel game,
+    bool isGrey,
+  ) =>
+      game.scores
+          .map((element) => Expanded(
+                flex: 1,
+                child: Text(
+                  element.toString(),
+                  style: const TextStyle(fontSize: 18),
+                  textAlign: TextAlign.center,
+                ),
+              ))
+          .toList();
 
   List<Widget> _buildPlayerList() {
     final List<Widget> list = [];
@@ -96,15 +119,28 @@ class _GamePageState extends State<GamePage> {
         child: const Icon(Icons.add),
       ),
       appBar: AppBar(
-        title: const Text("Game page"),
+        title: Row(children: [
+          Text(round.gameName),
+          const SizedBox(width: 10),
+          GestureDetector(
+            onTap: () {
+              editGameName();
+            },
+            child: const Icon(
+              Icons.edit,
+            ),
+          )
+        ]),
         actions: [
           IconButton(
             onPressed: () {
-              setState(() {
-                isHidePoint = !isHidePoint;
-              });
+              onChangeHidePoint(!isHidePoint);
             },
             icon: const Icon(Icons.remove_red_eye_outlined),
+          ),
+          IconButton(
+            onPressed: showSettingDialog,
+            icon: const Icon(Icons.settings),
           ),
         ],
       ),
@@ -131,6 +167,9 @@ class _GamePageState extends State<GamePage> {
                         );
                       }
                       return ListTile(
+                        onTap: () {
+                          showEditGameDialog(index - 1);
+                        },
                         title: Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
@@ -145,6 +184,13 @@ class _GamePageState extends State<GamePage> {
                               round.games[index - 1],
                               index % 2 == 1,
                             ),
+                          ),
+                        ),
+                        subtitle: Padding(
+                          padding: const EdgeInsets.only(right: 10),
+                          child: Text(
+                            round.games[index - 1].note,
+                            textAlign: TextAlign.right,
                           ),
                         ),
                       );
@@ -162,6 +208,67 @@ class _GamePageState extends State<GamePage> {
         gameIndex: widget.gameIndex,
         players: round.players,
         onDone: getGame,
+      ),
+    );
+  }
+
+  void showEditGameDialog(int index) {
+    showDialog(
+      context: context,
+      builder: (context) => AddGameDialog(
+        gameIndex: widget.gameIndex,
+        players: round.players,
+        onDone: getGame,
+        game: round.games[index],
+        index: index,
+      ),
+    );
+  }
+
+  void showSettingDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => SettingDialog(
+        gameIndex: widget.gameIndex,
+        onDone: checkResult,
+        gameLimit: round.gameLimit,
+        pointLimit: round.pointLimit,
+      ),
+    );
+  }
+
+  void editGameName() {
+    showDialog(
+      context: context,
+      builder: (context) => EditGameNameDialog(
+        gameIndex: widget.gameIndex,
+        oldName: round.gameName,
+      ),
+    );
+  }
+
+  void showDoneDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        actions: [
+          TextButton(
+            onPressed: Navigator.of(context).pop,
+            child: const Text("Cancel"),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              showSettingDialog();
+            },
+            child: const Text("Setting"),
+          ),
+        ],
+        title: const Text("^.^"),
+        content: const Text(
+          "Game has been stopped! Try change setting to continue",
+          textAlign: TextAlign.start,
+        ),
       ),
     );
   }

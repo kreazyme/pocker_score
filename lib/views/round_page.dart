@@ -64,7 +64,30 @@ class _RoundPageState extends State<RoundPage> {
                         MaterialPageRoute(
                           builder: (context) => GamePage(gameIndex: index),
                         )),
-                    title: Text("${rounds[index].players.length} players"),
+                    title: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: RichText(
+                        text: TextSpan(children: [
+                          TextSpan(children: [
+                            TextSpan(
+                              text: "${rounds[index].gameName},  ",
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87,
+                                fontSize: 20,
+                              ),
+                            ),
+                            TextSpan(
+                              text: "${rounds[index].players.length} players",
+                              style: const TextStyle(
+                                color: Colors.grey,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ])
+                        ]),
+                      ),
+                    ),
                     subtitle: Text(GetTimeAgo.parse(rounds[index].createTime)),
                     trailing: MaterialButton(
                       onPressed: () {

@@ -2,15 +2,13 @@
 
 A new Flutter project.
 
-## Getting Started
+## App tính điểm đánh bài
 
-This project is a starting point for a Flutter application.
+Tết 2023, vì quá cay cú mấy cái app tính điểm đánh bài đều quảng cáo quá nhiều nên mình quyết tâm viết cái app này để tính điểm đánh xì dách :see_no_evil:
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## TechStack:
+- [x] MVC Architecture
+- [x] Hive Database
+- [x] Hive generator and build runner
+- [ ] Firebase Crashlytics
+- [ ] Public to Play Store

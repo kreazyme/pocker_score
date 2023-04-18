@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.pocker_score">
    <application
-        android:label="pocker_score"
+        android:label="Ghi điểm đánh bài"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

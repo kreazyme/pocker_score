@@ -20,19 +20,31 @@ class RoundModelAdapter extends TypeAdapter<RoundModel> {
       games: (fields[0] as List).cast<GameModel>(),
       players: (fields[1] as List).cast<PlayerModel>(),
       createTime: fields[2] as DateTime,
+      pointLimit: fields[3] as int,
+      gameLimit: fields[4] as int,
+      isHidePoint: fields[5] as bool,
+      gameName: fields[6] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, RoundModel obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.games)
       ..writeByte(1)
       ..write(obj.players)
       ..writeByte(2)
-      ..write(obj.createTime);
+      ..write(obj.createTime)
+      ..writeByte(3)
+      ..write(obj.pointLimit)
+      ..writeByte(4)
+      ..write(obj.gameLimit)
+      ..writeByte(5)
+      ..write(obj.isHidePoint)
+      ..writeByte(6)
+      ..write(obj.gameName);
   }
 
   @override
