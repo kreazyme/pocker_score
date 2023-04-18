@@ -2,11 +2,13 @@
 
 A new Flutter project.
 
-## A Project with Flutter by spoon with :beers: to record Pocker's Score
+## App tính điểm đánh bài
+
+Tết 2023, vì quá cay cú mấy cái app tính điểm đánh bài đều quảng cáo quá nhiều nên mình quyết tâm viết cái app này để tính điểm đánh xì dách :see_no_evil:
 
 ## TechStack:
-[x] MVC Architecture
-[x] Hive Database
-[x] Hive generator and build runner
-[ ] Firebase Crashlytics
-[ ] Public to Play Store
+- [x] MVC Architecture
+- [x] Hive Database
+- [x] Hive generator and build runner
+- [ ] Firebase Crashlytics
+- [ ] Public to Play Store
